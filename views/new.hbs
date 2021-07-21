@@ -1,0 +1,41 @@
+<div class="container record-add-form shadow">
+  <form action="/records?_method=PUT" method="POST" class="d-flex flex-column m-3">
+    <div class="record-name-group d-flex justify-content-between">
+      <div class="form-group">
+        <small for="name">*必填欄位</small>
+        <textarea type="text" class="form-control" value="請輸入你的支出">
+      </div>
+    </div>
+
+    <div class="record-name-group d-flex justify-content-between">
+      <div class="form-group">
+        <label for="name">名稱</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ record.name }}" required>
+      </div>
+    </div>
+
+    <div class="record-date-group d-flex justify-content-between">
+      <div class="date-group">
+        <label for="name">日期</label>
+        <input type="text" class="form-control" id="date" name="date" value="{{ record.date }}" required>
+      </div>
+    </div>
+
+    <div class="record-cate d-flex justify-content-between">
+      <div class="form-group">
+        <label for="category">類別</label>
+        <input type="text" class="form-control" id="category" name="category" value="{{ record.category }}" required>
+      </div>
+    </div>
+
+    <div class="record-amount d-flex justify-content-between">
+      <div class="form-group">
+        <label for="amount">金額</label>
+        <input type="text" class="form-control" id="amount" name="amount" value="{{ record.amount }}" required>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+    <a class="btn btn-primary mt-3" href="/" role="button">Back</a>
+  </form>
+</div>
