@@ -6,4 +6,4 @@ function dateToString(date) {
   return dateArray.join('-')
 }
 
-module.export = dateToString
+module.exports = dateToString

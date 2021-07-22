@@ -3,7 +3,7 @@ const router = express.Router()
 
 const Record = require('../../models/record')
 
-const { dateToString } = require('../../public/javascripts/tools')
+const dateToString = require('../../tools/dateToString')
 
 router.get('/', (req, res) => {
   return Record.find()

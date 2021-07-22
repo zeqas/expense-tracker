@@ -2,10 +2,9 @@ const express = require('express')
 const router = express.Router()
 
 const Record = require('../../models/record')
-const Category = require('../../models/category')
 
 const dateToString = require('../../tools/dateToString')
-const inputValidation = require('../../tools/inputValidation.')
+const inputValidation = require('../../tools/inputValidation')
 
 let today = new Date()
 today = dateToString(today)
