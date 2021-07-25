@@ -1,15 +1,13 @@
 <div class="container">
   <div class="d-flex flex-column">
     <!-- dropdown -->
-    <form action="/records/filter" method="GET">
+    <form action="/" method="GET">
       <div class="input-group filter-category mb-3 container-fluid">
-        <select class="form-control ml-2" id="record-category" name="category" onchange="submit()">
-          <option value="">所有分類</option>
-          <option value="home" {{#is category '家居物業' }} selected {{/is}}>家居物業</option>
-          <option value="transportation" {{#is category '交通出行' }} selected {{/is}}>交通出行</option>
-          <option value="entertainment" {{#is category '休閒娛樂' }} selected {{/is}}>休閒娛樂</option>
-          <option value="food" {{#is category '餐飲食品' }} selected {{/is}}>餐飲食品</option>
-          <option value="others" {{#is category '其他' }} selected {{/is}}>其他</option>
+        <select class="form-select" name="category" id="category-filter" data-value="{{category}}" aria-label="Default select">
+          <option value="" selected>所有分類</option>
+          {{#each categories}}
+          <option value="{{this._id}}">{{this.title}}</option>
+          {{/each}}
         </select>
       </div>
     </form>
@@ -24,29 +22,35 @@
       {{#each records}}
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <div class="record-part d-flex align-items-center justify-content-between">
+
           <div class="record-item d-flex align-items-center">
-            {{#is this.category '家居物業'}} <i class="fas fa-home"></i> {{/is}}
-            {{#is this.category '交通出行'}} <i class="fas fa-shuttle-van"></i> {{/is}}
-            {{#is this.category '休閒娛樂'}} <i class="fas fa-grin-beam"></i> {{/is}}
-            {{#is this.category '餐飲食品'}} <i class="fas fa-utensils"></i> {{/is}}
-            {{#is this.category '其他'}} <i class="fas fa-pen"></i> {{/is}}
+            <div class="col col-auto">
+              <a href="/?category={{ this.category._id }}" class="">
+                <i class="fas {{ this.category.icon }} category-icon"></i>
+              </a>
+            </div>
             <div class="record-info d-flex flex-column">
               <span class="record-info-name">{{ this.name }}</span>
               <span class="record-info-date">{{ this.date }}</span>
             </div>
           </div>
+
           <div class="record-amount">
             <span>{{ this.amount }}元</span>
           </div>
         </div>
+
         <div class="button-part">
+
           <form action="/records/{{ this._id }}/edit" method="GET" style="display: inline;">
             <button class="btn btn-outline-success" type="submit">修改</button>
           </form>
+
           <button type="button" class="btn btn-outline-danger" id="modal-button" data-toggle="modal"
             data-target="#deleteModal" data-id="{{ this._id }}">
             刪除
           </button>
+          
         </div>
       </li>
       {{/each}}
@@ -81,3 +85,4 @@
 </div>
 
 <script src="/tools/eventListener.js"></script>
+<script src="/tools/formValidation.js"></script>

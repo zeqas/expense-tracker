@@ -6,9 +6,10 @@ const recordSchema = new Schema({
     type: String,
     required: true
   },
-  category: {
-    type: String,
-    required: true
+  // 載入 Category的Schema, 並且將type設定為 ObjectId
+  categoryName: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category'
   },
   date: {
     type: Date,

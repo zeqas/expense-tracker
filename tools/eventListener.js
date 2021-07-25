@@ -5,8 +5,14 @@ function showDeleteModal(e) {
 }
 
 const recordPanel = document.querySelector('.record-section')
+
 recordPanel.addEventListener('click', (e) => {
   if (e.target.matches('#modal-button')) {
     showDeleteModal(e)
   }
 })
+
+// 分類：父層為 form 所以能夠使其重新顯示資料
+const categoryFilter = document.querySelector('#category-filter')
+categoryFilter.value = categoryFilter.dataset.value
+categoryFilter.addEventListener('change', () => categoryFilter.parentElement.submit())

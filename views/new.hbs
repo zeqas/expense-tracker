@@ -1,5 +1,5 @@
 <div class="container record-add-form shadow">
-  <form action="/records" method="POST" class="d-flex flex-column my-3">
+  <form action="/records" method="POST" class="d-flex flex-column my-3 needs-validation" novalidate>
     
     <div class="d-flex justify-content-between my-3">
       <div class="col-sm-2 fs-7">*必填欄位</div>
@@ -19,9 +19,10 @@
     <div class="record-cate d-flex justify-content-between mb-3">
       <label for="category" class="col-sm-2 col-form-label">類別*：</label>
       <div class="col-sm-10 justify-content-end">
-        <select class="form-select" name="category" id="category"  aria-label="Default select" required>
-          {{!-- 如何進行代入類別? --}}
-
+        <select class="form-select" name="category" id="category" date-value="" aria-label="Default select" required>
+          {{#each categories}}
+          <option value="{{ this._id }}">{{ this.title }}</option>
+          {{/each}}
         </select>
       </div>
     </div>
@@ -39,3 +40,5 @@
 
   </form>
 </div>
+
+<script src="/tools/formValidation.js"></script>

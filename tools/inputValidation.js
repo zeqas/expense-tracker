@@ -1,3 +1,5 @@
+// 用不到 ?
+
 function inputValidation(data) {
   const { name, category, date, amount } = data
   const validationResults = {

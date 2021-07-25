@@ -1,5 +1,5 @@
 <div class="container record-edit-form shadow">
-  <form action="/records/{{ record._id }}?_method=PUT" method="POST" class="d-flex flex-column my-3">
+  <form action="/records/{{ record._id }}?_method=PUT" method="POST" class="d-flex flex-column my-3 needs-validation" novalidate>
 
     <div class="d-flex justify-content-between my-3">
       <div class="col-sm-2 fs-7">*必填欄位</div>
@@ -19,8 +19,11 @@
     <div class="record-cate d-flex justify-content-between mb-3">
       <label for="category" class="col-sm-2 col-form-label">類別*：</label>
       <div class="col-sm-10 justify-content-end">
-        <select class="form-select" name="category" id="category" aria-label="Default select" required>
+        <select class="form-select" name="category" id="category" data-value="{{ record.category }}" aria-label="Default select" required>
           {{!-- 如何代入類別? --}}
+          {{#each categories}}
+          <option value="{{ this._id }}">{{ this.title }}</option>
+          {{/each}}
         </select>
       </div>
     </div>
@@ -33,9 +36,11 @@
 
     <div class="d-flex justify-content-end mb-3">
       <div class="col-sm-10">
-        <button type="submit" class="btn btn-success col-12">新增支出</button>
+        <button type="submit" class="btn btn-success col-12">送出</button>
       </div>
     </div>
 
   </form>
 </div>
+
+<script src="/tools/formValidation.js"></script>
