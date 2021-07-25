@@ -91,7 +91,7 @@ router.put('/:id', (req, res) => {
         record.amount = updatedRecord.amount
         return record.save()
       })
-      .then(() => res.redirect('/'))
+      .then(() => res.redirect(`/records/${id}`))
       .catch(error => console.error(error))
   }
 })

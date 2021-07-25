@@ -20,62 +20,64 @@
       <span class="total-amount m-3">{{ totalAmount }}</span>
     </div>
 
-  <ul class="list-group">
-    {{#each records}}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div class="record-part d-flex align-items-center justify-content-between">
-        <div class="record-item d-flex align-items-center">
-          {{#is this.category '家居物業'}} <i class="fas fa-home"></i> {{/is}}
-          {{#is this.category '交通出行'}} <i class="fas fa-shuttle-van"></i> {{/is}}
-          {{#is this.category '休閒娛樂'}} <i class="fas fa-grin-beam"></i> {{/is}}
-          {{#is this.category '餐飲食品'}} <i class="fas fa-utensils"></i> {{/is}}
-          {{#is this.category '其他'}} <i class="fas fa-pen"></i> {{/is}}
-          <div class="record-info d-flex flex-column">
-            <span class="record-info-name">{{ this.name }}</span>
-            <span class="record-info-date">{{ this.date }}</span>
+    <ul class="list-group record-section">
+      {{#each records}}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="record-part d-flex align-items-center justify-content-between">
+          <div class="record-item d-flex align-items-center">
+            {{#is this.category '家居物業'}} <i class="fas fa-home"></i> {{/is}}
+            {{#is this.category '交通出行'}} <i class="fas fa-shuttle-van"></i> {{/is}}
+            {{#is this.category '休閒娛樂'}} <i class="fas fa-grin-beam"></i> {{/is}}
+            {{#is this.category '餐飲食品'}} <i class="fas fa-utensils"></i> {{/is}}
+            {{#is this.category '其他'}} <i class="fas fa-pen"></i> {{/is}}
+            <div class="record-info d-flex flex-column">
+              <span class="record-info-name">{{ this.name }}</span>
+              <span class="record-info-date">{{ this.date }}</span>
+            </div>
+          </div>
+          <div class="record-amount">
+            <span>{{ this.amount }}元</span>
           </div>
         </div>
-        <div class="record-amount">
-          <span>{{ this.amount }}元</span>
+        <div class="button-part">
+          <form action="/records/{{ this._id }}/edit" method="GET" style="display: inline;">
+            <button class="btn btn-outline-success" type="submit">修改</button>
+          </form>
+          <button type="button" class="btn btn-outline-danger" id="modal-button" data-toggle="modal"
+            data-target="#deleteModal" data-id="{{ this._id }}">
+            刪除
+          </button>
+        </div>
+      </li>
+      {{/each}}
+    </ul>
+
+    <!-- delete check modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">這是一則提醒!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            確定要刪除該支出項目嗎？
+          </div>
+          <div class="modal-footer">
+            <form action="" method="POST" style="display: inline;"
+            id="modal-delete-button">
+              <button type="submit" class="btn btn-danger">是的，我確定</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </form>
+          </div>
         </div>
       </div>
-      <div class="button-part">
-        <form action="/records/{{ this._id }}" method="GET" style="display: inline;">
-          <button class="btn btn-outline-success" type="submit">修改</button>
-        </form>
-        <button type="button" class="btn btn-outline-danger" id="modal-button" data-toggle="modal"
-          data-target="#deleteModal" data-id="{{ this._id }}">
-          刪除
-        </button>
-      </div>
-    </li>
-    {{/each}}
-  </ul>
-
-  <a class="navbar-brand" href="/records/new">新增支出</a>
-
-</div>
-
-<!-- delete check modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">刪除支出項目</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        您確定要刪除該支出項目嗎？
-      </div>
-      <div class="modal-footer">
-        <form action="/records/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;"
-        id="modal-delete-button">
-          <button type="submit" class="btn btn-danger">是的，我確定</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">並沒有</button>
-        </form>
-      </div>
     </div>
+  
+  <a class="navbar-brand" href="/records/new">新增支出</a>
   </div>
 </div>
+
+<script src="/tools/eventListener.js"></script>
