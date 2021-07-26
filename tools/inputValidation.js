@@ -1,5 +1,4 @@
-// 用不到 ?
-
+// 用在 new & edit 
 function inputValidation(data) {
   const { name, category, date, amount } = data
   const validationResults = {
