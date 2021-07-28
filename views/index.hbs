@@ -1,12 +1,12 @@
 <div class="container">
   <div class="d-flex flex-column">
     <!-- dropdown -->
-    <form action="/" method="GET">
+    <form action="/filter" method="GET">
       <div class="input-group mb-3 container-fluid">
-        <select class="form-select" name="category" id="category-filter" data-value="{{category}}" aria-label="Default select">
+        <select class="form-control" name="category" id="category-filter"  aria-label="Default select" onchange="submit()">
           <option value="" selected>所有分類</option>
-          {{#each categories}}
-          <option value="{{this._id}}">{{this.title}}</option>
+          {{#each categoryList}}
+          <option value="{{ this.categoryName }}" {{#is this.categoryName ../theCategory }} selected {{/is}}>{{this.categoryName}}</option>
           {{/each}}
         </select>
       </div>
@@ -27,9 +27,7 @@
           <div class="record-item d-flex align-items-center">
             <div class="col col-auto">
               <!-- icon -->
-              <a href="/?category={{ this.category._id }}" class="">
-                <i class="fas {{ this.category.icon }} category-icon"></i>
-              </a>
+              <i class="{{ this.categoryIcon }}"></i>
             </div>
             <!-- name & date -->
             <div class="record-info d-flex flex-column">
@@ -59,6 +57,10 @@
       {{/each}}
     </ul>
 
+    <div class="mx-auto">
+      <a class="navbar-brand btn-lg active mt-3" href="/records/new">新增支出</a>
+    </div>
+
     <!-- delete check modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -73,7 +75,7 @@
             確定要刪除該支出項目嗎？
           </div>
           <div class="modal-footer">
-            <form action="" method="POST" style="display: inline;"
+            <form action="/records/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;"
             id="modal-delete-button">
               <button type="submit" class="btn btn-danger">是的，我確定</button>
               <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
@@ -83,9 +85,5 @@
       </div>
     </div>
   
-  <a class="navbar-brand" href="/records/new">新增支出</a>
   </div>
 </div>
-
-<script src="/tools/eventListener.js"></script>
-<script src="/tools/formValidation.js"></script>
