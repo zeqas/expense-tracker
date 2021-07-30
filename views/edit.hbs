@@ -16,13 +16,13 @@
       <input type="date" class="form-control" id="date" name="date" value="{{ record.date }}" required>
     </div>
 
-    <div class="record-cate d-flex justify-content-between mb-3">
+    <div class="record-cate d-flex justify-content-between  align-items-center mb-3">
       <label for="category" class="col-sm-2 col-form-label">類別*：</label>
       <div class="col-sm-10 justify-content-end">
-        <select class="form-select" name="category" id="category" data-value="{{ record.category }}" aria-label="Default select" required>
-          {{!-- 如何代入類別? --}}
-          {{#each categories}}
-          <option value="{{ this._id }}">{{ this.title }}</option>
+        <select class="form-select ml-2 justify-content-end"  id="category" name="category" aria-label="Default select" data-value="{{ record.category }}"  required>
+          <option value="" selected>請選擇分類</option>
+          {{#each categoryList}}
+          <option value="{{ this.categoryName }}">{{ this.categoryName }}</option>
           {{/each}}
         </select>
       </div>

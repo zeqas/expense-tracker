@@ -1,5 +1,5 @@
 <div class="container record-add-form shadow">
-  <form action="/records" method="POST" class="d-flex flex-column my-3 needs-validation" novalidate>
+  <form action="/records/new" method="POST" class="d-flex flex-column my-3 needs-validation" novalidate>
     
     <div class="d-flex justify-content-between my-3">
       <div class="col-sm-2 fs-7">*必填欄位</div>
@@ -8,20 +8,25 @@
 
     <div class="record-name-group d-flex justify-content-between mb-3">
       <label for="name" class="col-sm-2 col-form-label">名稱*：</label>
-      <input type="text" class="form-control" id="name" name="name" value="{{ record.name }}" required>  
+      <input type="text" class="form-control {{#is validation.name false }} is-invalid {{/is}}" placeholder="項目名稱" id="record-name" name="name" {{#if validation.name}} value="{{ record.name}}" {{/if}} aria-label="Username" required>  
     </div>
 
     <div class="record-date-group d-flex justify-content-between mb-3">
       <label for="date" class="col-sm-2 col-form-label">日期*：</label>
-      <input type="date" class="form-control" id="date" name="date" value="{{ record.date }}" required>
+      <input type="date" class="form-control 
+      {{#is validation.date false }} is-invalid {{/is}}" 
+      id="record-date" name="date" value="{{ today }}" required>
     </div>
 
-    <div class="record-cate d-flex justify-content-between mb-3">
+    <div class="record-cate d-flex justify-content-between  align-items-center mb-3">
       <label for="category" class="col-sm-2 col-form-label">類別*：</label>
       <div class="col-sm-10 justify-content-end">
-        <select class="form-select" name="category" id="category" date-value="" aria-label="Default select" required>
-          {{#each categories}}
-          <option value="{{ this._id }}">{{ this.title }}</option>
+        <select class="form-select ml-2 justify-content-end 
+        " 
+        id="record-category" name="category" aria-label="Default select" required>
+          <option value="" selected>請選擇分類</option>
+          {{#each categoryList}}
+          <option value="{{ this.categoryName }}">{{ this.categoryName }}</option>
           {{/each}}
         </select>
       </div>
@@ -29,7 +34,10 @@
 
     <div class="record-amount d-flex justify-content-between mb-3">
       <label for="amount" class="col-sm-2 col-form-label">金額*：</label>
-      <input type="number" class="form-control col-sm-10" id="amount" name="amount" value="{{ record.amount }}" required>
+      <input type="number" class="form-control col-sm-10 
+      {{#is validation.amount false }} is-invalid {{/is}}" 
+      placeholder="金額" id="amount" name="amount" 
+      {{#if validation.amount}} value="{{ record.amount}}" {{/if}} required>
     </div>
 
     <div class="d-flex justify-content-end mb-3">
