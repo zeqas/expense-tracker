@@ -48,21 +48,17 @@
           </form>
 
           <button type="button" class="btn btn-outline-danger" id="modal-button" data-toggle="modal"
-            data-target="#deleteModal" data-id="{{ this._id }}">
+            data-target="#deleteModal{{ this._id }}" data-id="{{ this._id }}">
             刪除
           </button>
           
         </div>
       </li>
-      {{/each}}
+      
     </ul>
 
-    <div class="mx-auto">
-      <a class="navbar-brand btn-lg active mt-3" href="/records/new">新增支出</a>
-    </div>
-
     <!-- delete check modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal{{ this._id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -83,6 +79,11 @@
           </div>
         </div>
       </div>
+    </div>
+    {{/each}}
+
+    <div class="mx-auto">
+      <a class="navbar-brand btn-lg active mt-3" href="/records/new">新增支出</a>
     </div>
   
   </div>

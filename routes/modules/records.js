@@ -84,12 +84,12 @@ router.put('/:id', (req, res) => {
 
 // delete
 router.delete('/:id', (req, res) => {
-  const id = req.params.id
+  const _id = req.params.id
   // id 不存在則返回首頁
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
     res.redirect('/')
   }
-  return Record.findById(id)
+  return Record.findById(_id)
     .then(record => record.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
