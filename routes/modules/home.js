@@ -8,6 +8,7 @@ const dateToString = require('../../tools/dateToString')
 
 
 router.get('/', async (req, res) => {
+  const userId = req.user._id
   const categoryList = await Category.find().lean()
   const categoryData = {}
 
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
     categoryData[category.categoryName] = category.categoryIcon
   })
 
-  return Record.find()
+  Record.find({ userId })
     .sort({ date: 'asc' })
     .lean()
     .then(records => {

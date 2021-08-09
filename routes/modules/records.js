@@ -21,7 +21,8 @@ router.get('/new', async (req, res) => {
 
 router.post('/new', (req, res) => {
   const record = req.body
-  console.log(record)
+  const userId = req.user._id
+  const name = req.body.name
   const validation = inputValidation(record)
   // 驗證功能
   // 如何處理在顯示錯誤後，再次選擇類別?
@@ -32,7 +33,8 @@ router.post('/new', (req, res) => {
       name: record.name,
       category: record.category,
       date: record.date,
-      amount: record.amount
+      amount: record.amount,
+      userId: record.userId
     })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
@@ -41,9 +43,10 @@ router.post('/new', (req, res) => {
 
 // edit page
 router.get('/:id/edit', async (req, res) => {
-  const id = req.params.id
+  const userId = req.user._id
+  const _id = req.params.id
   const categoryList = await Category.find().lean()
-  return Record.findById(id)
+  return Record.findOne({ _id, userId })
     .lean()
     .then(record => {
       const currentDate = dateToString(record.date) 
@@ -54,12 +57,12 @@ router.get('/:id/edit', async (req, res) => {
 
 // edit record
 router.put('/:id', (req, res) => {
-  const id = req.params.id
-  const editedRecord = req.body
+  const userId = req.user._id
+  const _id = req.params.id
   const validation = inputValidation(editedRecord)
 
   if (Object.values(validation).includes(false)) {
-    return Record.findById(id)
+    return Record.findOne({ _id, userId })
       .lean()
       .then(record => {
         const currentDate = dateToString(record.date)
@@ -84,12 +87,13 @@ router.put('/:id', (req, res) => {
 
 // delete
 router.delete('/:id', (req, res) => {
+  const userId = req.user._id
   const _id = req.params.id
-  // id 不存在則返回首頁
+
   if (!mongoose.Types.ObjectId.isValid(_id)) {
     res.redirect('/')
   }
-  return Record.findById(_id)
+  return Record.findOne({ _id, userId })
     .then(record => record.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
