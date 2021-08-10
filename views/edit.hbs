@@ -11,6 +11,11 @@
       <input type="text" class="form-control" id="name" name="name" value="{{ record.name }}" required>
     </div>
 
+    <div class="record-merchant-group d-flex justify-content-between mb-3">
+      <label for="merchant" class="col-sm-2 col-form-label">店家*：</label>
+      <input type="text" class="form-control" id="merchant" name="merchant" value="{{ record.merchant }}">
+    </div>
+
     <div class="record-date-group d-flex justify-content-between mb-3">
       <label for="date" class="col-sm-2 col-form-label">日期*：</label>
       <input type="date" class="form-control" id="date" name="date" value="{{ record.date }}" required>

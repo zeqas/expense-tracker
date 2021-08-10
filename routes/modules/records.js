@@ -31,6 +31,7 @@ router.post('/new', (req, res) => {
   } else {
     return Record.create({
       name: record.name,
+      merchant: record.merchant,
       category: record.category,
       date: record.date,
       amount: record.amount,
@@ -73,7 +74,8 @@ router.put('/:id', (req, res) => {
     return Record.findById(id)
       .then(record => {
         [ record.name, record.category, record.date, record.amount ] = [ editedRecord.name, 
-        editedRecord.category, 
+        editedRecord.category,
+        editedRecord.merchant, 
         editedRecord.date, 
         editedRecord.amount ]
         return record.save()

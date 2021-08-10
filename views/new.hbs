@@ -11,6 +11,13 @@
       <input type="text" class="form-control {{#is validation.name false }} is-invalid {{/is}}" placeholder="項目名稱" id="record-name" name="name" {{#if validation.name}} value="{{ record.name}}" {{/if}} aria-label="Username" required>  
     </div>
 
+    <div class="record-merchant-group d-flex justify-content-between mb-3">
+      <label for="merchant" class="col-sm-2 col-form-label">店家*：</label>
+      <input type="text" class="form-control {{#is validation.merchant false }} is-invalid {{/is}}" placeholder="商家名稱"
+        id="record-merchant" name="merchant" {{#if validation.merchant}} value="{{ record.merchant}}" {{/if}} 
+        >
+    </div>
+
     <div class="record-date-group d-flex justify-content-between mb-3">
       <label for="date" class="col-sm-2 col-form-label">日期*：</label>
       <input type="date" class="form-control 
