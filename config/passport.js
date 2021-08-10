@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs')
 const LocalStrategy = require('passport-local').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
 
+const User = require('../models/user')
+
 module.exports = app => {
   // 初始化 Passport 模組
   app.use(passport.initialize())
@@ -20,7 +22,8 @@ module.exports = app => {
         if (!user) {
           return done(null, false, req.flash('warning_msg', '您的email尚未註冊過！'))
         }
-        return bcrypt.compare(password, user.password).then(isMatch => {
+        return bcrypt.compare(password, user.password)
+        .then(isMatch => {
           if (!isMatch) {
             return done(null, false, req.flash('warning_msg', '您的email或密碼不正確，請稍後再試。'))
           }

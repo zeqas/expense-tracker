@@ -6,13 +6,13 @@ const passport = require('passport')
 const bcrypt = require('bcryptjs')
 
 router.post('/login', (req, res) => {
-  console.log(req.flash('error'))
   res.render('login')
 })
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/users/login'
+  failureRedirect: '/users/login',
+  failureFlash: true
 }))
 
 router.get('/register', (req, res) => {
@@ -37,28 +37,30 @@ router.post('/register', (req, res) => {
       confirmPassword
     })
   }
-  User.findOne({ email }).then(user => {
-    // 如果已經註冊：退回原本畫面
-    if (user) {
-      errors.push({ message: '這個 Email 已經註冊過了。' })
-      res.render('register', {
-        name,
-        email,
-        password,
-        confirmPassword
-      })
-    }
-    return bcrypt
-      .genSalt(10)
-      .then(salt => bcrypt.hash(password, salt))
-      .then(hash => User.create({
-        name,
-        email,
-        password: hash
-      }))
-      .then(() => res.redirect('/'))
-      .catch(err => console.log(err))
-  })
+  User.findOne({ email })
+    .then(user => {
+      if (user) {
+        errors.push({ message: '這個 Email 已經註冊過了。' })
+        res.render('register', {
+          name,
+          email,
+          password,
+          confirmPassword
+        })
+      }
+      return bcrypt
+        .genSalt(10)
+        .then(salt => bcrypt.hash(password, salt))
+        .then(hash => {
+          User.create({
+            name,
+            email,
+            password: hash
+          })
+            .then(() => res.redirect('/'))
+            .catch(err => console.log(err))
+        })
+    })
 })
 
 router.get('/logout', (req, res) => {
