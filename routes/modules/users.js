@@ -5,7 +5,7 @@ const User = require('../../models/user')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 
-router.post('/login', (req, res) => {
+router.get('/login', (req, res) => {
   res.render('login')
 })
 
