@@ -12,32 +12,39 @@ const inputValidation = require('../../tools/inputValidation')
 let today = new Date()
 today = dateToString(today)
 
+// 類別資料
+// 如何用 Promise.all 只拿一次資料
+// const categoryList = Promise.all(Array.from({length: Category.length }, (_, i)=> Category.find().lean()))
+// console.log(categoryList)
+
 // create
 router.get('/new', async (req, res) => {
-  // 取得類別資料
   const categoryList = await Category.find().lean()
   res.render('new', { today, categoryList })
 })
 
-router.post('/new', (req, res) => {
+router.post('/', async (req, res) => {
   const record = req.body
   const userId = req.user._id
-  const name = req.body.name
   const validation = inputValidation(record)
+  const categoryList = await Category.find().lean()
   // 驗證功能
   // 如何處理在顯示錯誤後，再次選擇類別?
   if (Object.values(validation).includes(false)) {
-    res.render('new', { validation, today, record })
+    res.render('new', { validation, today, record, categoryList})
   } else {
-    return Record.create({
+    await Record.create({
       name: record.name,
       merchant: record.merchant,
       category: record.category,
       date: record.date,
       amount: record.amount,
-      userId: record.userId
+      userId
     })
-    .then(() => res.redirect('/'))
+    .then(() => {
+      req.flash('success_msg', '建立支出紀錄：成功')
+      res.redirect('/')
+    })
     .catch(error => console.log(error))
   }
 })
@@ -50,6 +57,10 @@ router.get('/:id/edit', async (req, res) => {
   return Record.findOne({ _id, userId })
     .lean()
     .then(record => {
+      if ((!record) || (!mongoose.Types.ObjectId.isValid(_id))){
+        return res.redirect('back')
+      }
+      
       const currentDate = dateToString(record.date) 
       res.render('edit', { record, currentDate, categoryList })
     })
@@ -57,33 +68,37 @@ router.get('/:id/edit', async (req, res) => {
 })
 
 // edit record
-router.put('/:id', (req, res) => {
+router.put('/:id',async (req, res) => {
   const userId = req.user._id
   const _id = req.params.id
+  const editedRecord = req.body
+  const categoryList = await Category.find().lean()
   const validation = inputValidation(editedRecord)
 
   if (Object.values(validation).includes(false)) {
+    
     return Record.findOne({ _id, userId })
       .lean()
       .then(record => {
         const currentDate = dateToString(record.date)
-        res.render('edit', { record, currentDate, validation })
+        res.render('edit', { record, currentDate, validation, categoryList })
       })
-      .catch(err => console.error(err))
+      .catch(error => console.error(error))
   } else {
-    return Record.findById(id)
+    return Record.findOne({ _id, userId })
       .then(record => {
-        [ record.name, record.category, record.date, record.amount ] = [ editedRecord.name, 
-        editedRecord.category,
-        editedRecord.merchant, 
-        editedRecord.date, 
-        editedRecord.amount ]
+        record.name = editedRecord.name
+        record.merchant = editedRecord.merchant
+        record.category = editedRecord.category
+        record.date = editedRecord.date
+        record.amount = editedRecord.amount
         return record.save()
       })
       .then(() => {
+        req.flash('success_msg', '修改支出紀錄：成功')
         res.redirect('/')
       })
-      .catch(err => console.error(err))
+      .catch(error => console.error(error))
   }
 })
 
@@ -96,8 +111,16 @@ router.delete('/:id', (req, res) => {
     res.redirect('/')
   }
   return Record.findOne({ _id, userId })
-    .then(record => record.remove())
-    .then(() => res.redirect('/'))
+    .then(record => {
+      if ((!record) || (!mongoose.Types.ObjectId.isValid(_id))) {
+        return res.redirect('back')
+      }
+      record.remove()
+    })
+    .then(() => {
+      req.flash('success_msg', '刪除支出紀錄：成功')
+      res.redirect('/')
+    })
     .catch(error => console.log(error))
 })
 

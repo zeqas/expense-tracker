@@ -6,57 +6,75 @@ const Record = require('../../models/record')
 
 const dateToString = require('../../tools/dateToString')
 
+// const categoryList = new Promise((resolve, reject) => {
+//   if (error) {
+//     return reject('error happened')
+//   }
+//   resolve({
+//     const categoryData = Category.find().lean()
+//     如何使用Promise來回傳 Category.find().lean() 內的資料?
+//   })
+// })
 
 router.get('/', async (req, res) => {
-  const userId = req.user._id
-  const categoryList = await Category.find().lean()
-  const categoryData = {}
+  try {
+    const userId = req.user._id
+    const categoryList = await Category.find().lean()
+    const categoryData = {}
 
-  categoryList.forEach(category => {
-    // 舉例： '交通出行'　替換成　'fas fa-shuttle-van'，並存放到categoryData內
-    categoryData[category.categoryName] = category.categoryIcon
-  })
-
-  Record.find({ userId })
-    .sort({ date: 'asc' })
-    .lean()
-    .then(records => {
-      let totalAmount = 0
-      // console.log(records)
-      records.map(record => {
-        totalAmount += record.amount
-        record.date = dateToString(record.date)
-        record.categoryIcon = categoryData[record.category]
-      })
-      res.render('index', { records, totalAmount, categoryList })
+    categoryList.forEach(category => 
+      categoryData[category.categoryName] = category.categoryIcon
+    )
+    
+    const records = await Record.find({ userId }).sort({ date: 'asc' }).lean()
+    
+    let totalAmount = 0
+    records.forEach(record => {
+      totalAmount += record.amount
+      record.date = dateToString(record.date)
+      record.categoryIcon = categoryData[record.category]
     })
-    .catch(err => console.error(err))
+    res.render('index', { records, totalAmount, categoryList })
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 router.get('/filter', async (req, res) => {
-  const categoryName = req.query.category
-  const categoryList = await Category.find().lean()
+  try {
+    const userId = req.user._id
+    const filteredCategory = req.query.category ? req.body.category : { $ne: '' }
+    const filteredMonth = Number(req.query.month)
+    const categoryList = await Category.find().lean()
 
-  // 只列出 Category 內符合categoryName的檔案
-  const category = await Category.findOne({ categoryName })
-  
-  if (!category) return res.redirect('/')
+    const filteredQuery = { userId }
+    // 篩選類別和月份
+    filteredCategory ? filteredQuery.category = filteredCategory : ''
+    filteredMonth ? filteredQuery.month = filteredMonth : ''
 
-  // 列出所有在 Record 內符合的 record(可能要加s) #沒開黃腔
-  // 應該可以不用另外設置 filter 就篩選出類別？
-  return Record.find({ category: category.categoryName })
-    .sort({ date: 'asc' })
-    .lean()
-    .then(records => {
-      let totalAmount = 0
-      records.map(record => {
-        record.date = dateToString(record.date)
-        totalAmount += record.amount
-        record.categoryIcon = category.categoryIcon
-      })
-      res.render('index', { records, totalAmount, theCategory: category.categoryName, categoryList })
+    // 用 $project 選取欄位、 $match 篩選
+    const records = await Record.aggregate([
+      { $project: { name: 1, merchant: 1, category: 1, date: 1, amount: 1, userId: 1, month: { $month: '$date' } } },
+      { $match: filteredQuery }
+    ])
+
+    const categoryData = {}
+    
+    categoryList.forEach(category => 
+      categoryData[category.categoryName] = category.categoryIcon
+    )
+
+    let totalAmount = 0
+    records.forEach(record => {
+      record.date = dateToString(record.date)
+      totalAmount += record.amount
+      record.categoryIcon = categoryData[record.category]
     })
 
+    return res.render('index', { records, totalAmount, filteredCategory, categoryList, filteredMonth })
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 module.exports = router
