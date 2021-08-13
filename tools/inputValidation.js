@@ -9,10 +9,10 @@ function inputValidation(data) {
     amount: true
   }
   name.trim().length === 0 ? validationResults.name = false : ''
-  merchant.length === 0 ? validationResults.merchant = false : ''
+  merchant.trim().length === 0 ? validationResults.merchant = false : ''
   category.length === 0 ? validationResults.category = false : ''
   date.length === 0 ? validationResults.date = false : ''
-  amount.length === 0 ? validationResults.amount = false : ''
+  amount.length === 0 || amount <= 0 ? validationResults.amount = false : ''
 
   return validationResults
 }
