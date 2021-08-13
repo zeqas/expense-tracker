@@ -56,3 +56,8 @@ npm run dev
 6. 出現以下訊息後，即可在 http://localhost:3000 開始使用
 ```
 Express is listening on localhost:3000
+
+## 使用者種子資料
+```
+email: user1@example.com
+password: 12345678
