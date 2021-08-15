@@ -43,7 +43,7 @@ router.get('/', async (req, res) => {
 router.get('/filter', async (req, res) => {
   try {
     const userId = req.user._id
-    const filteredCategory = req.query.category ? req.body.category : { $ne: '' }
+    const filteredCategory = req.query.category
     const filteredMonth = Number(req.query.month)
     const categoryList = await Category.find().lean()
 

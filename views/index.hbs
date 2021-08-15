@@ -1,10 +1,11 @@
 <div class="container">
   <div class="d-flex flex-column">
     <!-- dropdown -->
-    <form action="/filter" method="GET">
+    <form class="justify-content-end" action="/filter" method="GET">
       <div class="input-group mb-3 container-fluid">
         <select class="form-control" name="category" id="category-filter" aria-label="Default select"
           onchange="submit()">
+
           <option value="" selected>所有分類</option>
           {{#each categoryList}}
           <option value="{{ this.categoryName }}" {{#is this.categoryName ../theCategory }} selected {{/is}}>
@@ -14,7 +15,7 @@
       </div>
 
       <div class="input-group filter-month mb-3 container-fluid">
-        <select class="form-control ml-2" id="record-month" name="month" onchange="submit()">
+        <select class="form-control " id="record-month" name="month" onchange="submit()">
           <option value="">所有月份</option>
           <option value="1" {{#is filteredMonth '1' }} selected {{/is}}>一月</option>
           <option value="2" {{#is filteredMonth '2' }} selected {{/is}}>二月</option>
@@ -39,9 +40,9 @@
     {{/if}}
 
     <!-- display total amount -->
-    <div class="total-amount-section m-3 d-flex justify-content-center align-items-center">
-      <span class="total-amount-title m-3">總金額：</span>
-      <span class="total-amount m-3">{{ totalAmount }}</span>
+    <div class="total-amount-section d-flex align-items-center">
+      <h5 class="total-amount-title mt-4 ml-3">總金額：</h5>
+      <p class="total-amount mt-5 ml-5">{{ totalAmount }}</p>
     </div>
 
     <!-- record-section -->
