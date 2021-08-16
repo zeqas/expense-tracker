@@ -3,15 +3,17 @@
     <!-- dropdown -->
     <form class="justify-content-end" action="/filter" method="GET">
       <div class="input-group mb-3 container-fluid">
+        
         <select class="form-control" name="category" id="category-filter" aria-label="Default select"
-          onchange="submit()">
-
+          onchange="this.form.submit()">
           <option value="" selected>所有分類</option>
+          {{#unless categoryList}} <option disabled selected>請選擇類別</option>{{/unless}}
           {{#each categoryList}}
           <option value="{{ this.categoryName }}" {{#is this.categoryName ../theCategory }} selected {{/is}}>
             {{this.categoryName}}</option>
           {{/each}}
         </select>
+
       </div>
 
       <div class="input-group filter-month mb-3 container-fluid">
@@ -51,7 +53,7 @@
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <div class="record-part d-flex align-items-center justify-content-between">
 
-          <div class="record-item d-flex align-items-center">
+          <div class="record-item d-flex justify-content-center align-items-center">
             <div class="col col-auto">
               <!-- icon -->
               <i class="{{ this.categoryIcon }}"></i>
@@ -63,7 +65,7 @@
             </div>
           </div>
           <!-- amount -->
-          <div class="record-amount">
+          <div class="record-amount d-flex justify-content-center align-items-center ml-3">
             <span>{{ this.amount }}元</span>
           </div>
         </div>

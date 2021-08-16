@@ -1,0 +1,16 @@
+
+.total-amount-section {
+  display: flex;
+  align-items: center;
+}
+
+.record-section {
+  display: flex;
+  
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
