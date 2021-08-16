@@ -35,13 +35,6 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
-hbs.handlebars.registerHelper('isEqual', function (v1, v2, options) {
-  if (v1 === v2) {
-    return options.fn(this);
-  }
-  return options.inverse(this);
-})
-
 usePassport(app)
 app.use(flash())
 
