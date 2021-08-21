@@ -41,9 +41,9 @@
       <label for="category" class="col-sm-2 col-form-label">類別*：</label>
       <div class="col-sm-10 justify-content-end">
         <select class="form-select ml-2 justify-content-end {{#is validation.category false }} is-invalid {{/is}}"  id="category" name="category" aria-label="Default select" data-value="{{ record.category }}"  required>
-          <option value="" selected>請選擇分類</option>
           {{#each categoryList}}
-          <option value="{{ this.categoryName }}">{{ this.categoryName }}</option>
+          <option value="{{ this.categoryName }}" {{#is this.categoryName ../record.category }} selected {{/is}}>
+            {{ this.categoryName }}</option>
           {{/each}}
         </select>
         <div id="validationServer04Feedback" class="invalid-feedback">

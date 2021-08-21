@@ -54,6 +54,7 @@ router.get('/:id/edit', async (req, res) => {
   const userId = req.user._id
   const _id = req.params.id
   const categoryList = await Category.find().lean()
+
   return Record.findOne({ _id, userId })
     .lean()
     .then(record => {

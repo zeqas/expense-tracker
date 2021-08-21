@@ -6,10 +6,10 @@
         
         <select class="form-control" name="category" id="category-filter" aria-label="Default select"
           onchange="this.form.submit()">
+          {{#unless filteredCategory}} <option disabled selected>請選擇類別</option>{{/unless}}
           <option value="" selected>所有分類</option>
-          {{#unless categoryList}} <option disabled selected>請選擇類別</option>{{/unless}}
           {{#each categoryList}}
-          <option value="{{ this.categoryName }}" {{#is this.categoryName ../theCategory }} selected {{/is}}>
+          <option value="{{ this.categoryName }}" {{#is this.categoryName ../filteredCategory }} selected {{/is}}>
             {{this.categoryName}}</option>
           {{/each}}
         </select>
@@ -42,9 +42,9 @@
     {{/if}}
 
     <!-- display total amount -->
-    <div class="total-amount-section d-flex align-items-center">
-      <h5 class="total-amount-title mt-4 ml-3">總金額：</h5>
-      <p class="total-amount mt-5 ml-5">{{ totalAmount }}</p>
+    <div class="total-amount-section d-flex align-items-center justify-content-between">
+      <p class="total-amount-title mx-5">總金額：</p>
+      <h1 class="total-amount mt-5 mx-5">{{ totalAmount }}</h1>
     </div>
 
     <!-- record-section -->

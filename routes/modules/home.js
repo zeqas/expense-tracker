@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
     const userId = req.user._id
     const categoryList = await Category.find().lean()
     const categoryData = {}
-
+    
     categoryList.forEach(category => 
       categoryData[category.categoryName] = category.categoryIcon
     )
