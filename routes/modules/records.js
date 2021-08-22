@@ -1,17 +1,15 @@
 const express = require('express')
+const dayjs = require('dayjs')
+const localeData = require('dayjs/plugin/localeData')
 const router = express.Router()
 const mongoose = require('mongoose')
 const Category = require('../../models/category')
 const Record = require('../../models/record')
 
-const dateToString = require('../../tools/dateToString')
 const inputValidation = require('../../tools/inputValidation')
 
-// 目前時間 = today
-
-let today = new Date()
-today = dateToString(today)
-
+dayjs.extend(localeData)
+const today = dayjs().format('YYYY-MM-DD')
 // 類別資料
 // 如何用 Promise.all 只拿一次資料
 // const categoryList = Promise.all(Array.from({length: Category.length }, (_, i)=> Category.find().lean()))
@@ -61,9 +59,8 @@ router.get('/:id/edit', async (req, res) => {
       if ((!record) || (!mongoose.Types.ObjectId.isValid(_id))){
         return res.redirect('back')
       }
-      
-      const currentDate = dateToString(record.date) 
-      res.render('edit', { record, currentDate, categoryList })
+      record.date = dayjs(record.date).format('YYYY-MM-DD')
+      res.render('edit', { record, categoryList })
     })
     .catch(error => console.log(error))
 })
@@ -81,7 +78,7 @@ router.put('/:id',async (req, res) => {
     return Record.findOne({ _id, userId })
       .lean()
       .then(record => {
-        const currentDate = dateToString(record.date)
+        const currentDate = dayjs(record.date).format('YYYY-MM-DD')
         res.render('edit', { record, currentDate, validation, categoryList })
       })
       .catch(error => console.error(error))

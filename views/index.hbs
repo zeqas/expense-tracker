@@ -4,33 +4,37 @@
     <form class="justify-content-end" action="/filter" method="GET">
       <div class="input-group mb-3 container-fluid">
         
-        <select class="form-control" name="category" id="category-filter" aria-label="Default select"
-          onchange="this.form.submit()">
-          {{#unless filteredCategory}} <option disabled selected>請選擇類別</option>{{/unless}}
+        <select class="form-control" id="filteredCategory" name="filteredCategory" aria-label="Default select" onchange="submit()">
+          {{#unless filteredCategory}} 
+          <option disabled selected>請選擇類別</option>
+          {{/unless}}
+
           <option value="" selected>所有分類</option>
+
           {{#each categoryList}}
-          <option value="{{ this.categoryName }}" {{#is this.categoryName ../filteredCategory }} selected {{/is}}>
-            {{this.categoryName}}</option>
+          <option value="{{ this.categoryName }}" 
+          {{#is this.categoryName ../filteredCategory }} selected {{/is}}>
+            {{this.categoryName}}
+          </option>
           {{/each}}
         </select>
 
       </div>
 
       <div class="input-group filter-month mb-3 container-fluid">
-        <select class="form-control " id="record-month" name="month" onchange="submit()">
+        <select class="form-control " id="filteredMonth" name="filteredMonth" aria-label="Default select" onchange="submit()">
+          {{#unless filteredMonth}}
+          <option selected disabled hidden>請選擇月份</option>
+          {{/unless}}
+
           <option value="">所有月份</option>
-          <option value="1" {{#is filteredMonth '1' }} selected {{/is}}>一月</option>
-          <option value="2" {{#is filteredMonth '2' }} selected {{/is}}>二月</option>
-          <option value="3" {{#is filteredMonth '3' }} selected {{/is}}>三月</option>
-          <option value="4" {{#is filteredMonth '4' }} selected {{/is}}>四月</option>
-          <option value="5" {{#is filteredMonth '5' }} selected {{/is}}>五月</option>
-          <option value="6" {{#is filteredMonth '6' }} selected {{/is}}>六月</option>
-          <option value="7" {{#is filteredMonth '7' }} selected {{/is}}>七月</option>
-          <option value="8" {{#is filteredMonth '8' }} selected {{/is}}>八月</option>
-          <option value="9" {{#is filteredMonth '9' }} selected {{/is}}>九月</option>
-          <option value="10" {{#is filteredMonth '10' }} selected {{/is}}>十月</option>
-          <option value="11" {{#is filteredMonth '11' }} selected {{/is}}>十一月</option>
-          <option value="12" {{#is filteredMonth '12' }} selected {{/is}}>十二月</option>
+          
+          {{#each month}}
+          <option value="{{this}}" 
+          {{#is this ../filteredMonth}} selected {{/is}}>
+            {{this}}
+          </option>
+          {{/each}}
         </select>
       </div>
     </form>
@@ -60,7 +64,12 @@
             </div>
             <!-- name & date -->
             <div class="record-info d-flex flex-column">
-              <span class="record-info-name">{{ this.name }}</span>
+              <div class="record-info-name justify-content-between">{{ this.name }}
+                <span class="record-info-merchant ml-2" style="font-size: small;">
+                  {{this.merchant}}
+                </span>
+              </div>
+                
               <span class="record-info-date">{{ this.date }}</span>
             </div>
           </div>

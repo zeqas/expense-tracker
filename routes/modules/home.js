@@ -1,11 +1,12 @@
 const express = require('express')
+const dayjs = require('dayjs')
+const localeData = require('dayjs/plugin/localeData')
 const router = express.Router()
 
 const Category = require('../../models/category')
 const Record = require('../../models/record')
 
-const dateToString = require('../../tools/dateToString')
-
+dayjs.extend(localeData)
 // const categoryList = new Promise((resolve, reject) => {
 //   if (error) {
 //     return reject('error happened')
@@ -31,7 +32,7 @@ router.get('/', async (req, res) => {
     let totalAmount = 0
     records.forEach(record => {
       totalAmount += record.amount
-      record.date = dateToString(record.date)
+      record.date = dayjs(record.date).format('YYYY-MM-DD')
       record.categoryIcon = categoryData[record.category]
     })
     res.render('index', { records, totalAmount, categoryList })
@@ -43,14 +44,20 @@ router.get('/', async (req, res) => {
 router.get('/filter', async (req, res) => {
   try {
     const userId = req.user._id
-    const filteredCategory = req.query.category
-    const filteredMonth = Number(req.query.month)
+    const { filteredCategory, filteredMonth } = req.query
+    // const filteredMonth = Number(req.query.month)
+    const month = dayjs.months()
     const categoryList = await Category.find().lean()
 
     const filteredQuery = { userId }
     // 篩選類別和月份
     filteredCategory ? filteredQuery.category = filteredCategory : ''
-    filteredMonth ? filteredQuery.month = filteredMonth : ''
+    
+    const selectMonth = dayjs().month(month.indexOf(filteredMonth))
+    filteredMonth ? filteredQuery.date = {
+      $gte: dayjs(selectMonth).startOf('month').toDate(),
+      $lte: dayjs(selectMonth).endOf('month').toDate()
+    } : ''
 
     // 用 $project 選取欄位、 $match 篩選
     const records = await Record.aggregate([
@@ -66,12 +73,12 @@ router.get('/filter', async (req, res) => {
 
     let totalAmount = 0
     records.forEach(record => {
-      record.date = dateToString(record.date)
+      record.date = dayjs(record.date).format('YYYY-MM-DD')
       totalAmount += record.amount
       record.categoryIcon = categoryData[record.category]
     })
 
-    return res.render('index', { records, totalAmount, filteredCategory, categoryList, filteredMonth })
+    return res.render('index', { records, totalAmount, categoryList, month, filteredCategory, filteredMonth })
   } catch (error) {
     console.error(error)
   }
