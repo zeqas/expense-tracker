@@ -20,6 +20,7 @@ dayjs.extend(localeData)
 router.get('/', async (req, res) => {
   try {
     const userId = req.user._id
+    const month = dayjs.months()
     const categoryList = await Category.find().lean()
     const categoryData = {}
     
@@ -35,7 +36,7 @@ router.get('/', async (req, res) => {
       record.date = dayjs(record.date).format('YYYY-MM-DD')
       record.categoryIcon = categoryData[record.category]
     })
-    res.render('index', { records, totalAmount, categoryList })
+    res.render('index', { records, totalAmount, categoryList, month })
   } catch (error) {
     console.error(error)
   }
