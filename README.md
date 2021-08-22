@@ -28,6 +28,7 @@
 - 模板引擎 Express-handlebars v5.3.2
 - 實用套件 Nodemon v2.0.7
 - 重構套件 Method-override v3.0.0
+- 日期套件 dayjs v1.10.6
 
 ---
 
@@ -57,7 +58,9 @@ npm run dev
 ```
 Express is listening on localhost:3000
 
-## 使用者種子資料
 ```
+---
+## 使用者種子資料
+
 email: user1@example.com
 password: 12345678
